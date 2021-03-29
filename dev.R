@@ -2,54 +2,83 @@
 
 library(imager)
 library(dplyr)
+library(gtable)
+library(rsvg)
+library(png)
+library(lattice)
+library(gridExtra)
+library(grid)
+library(ggplot2)
+
+dice.imgs <- c("one.svg", "two.svg", "three.svg", "four.svg", "five.svg", "six.svg")
 
 img <- load.image("bakunin.jpg") %>%
   grayscale() %>%
   imsub(x<=1050)
 
-get_measurements <- function(w, mat){
+get.measurements <- function(w, mat){
   dice_size_w <- floor(nrow(mat)/w)
   dice_count_h <- floor(ncol(mat)/dice_size_w)
   return(list(dice_count_w=w, dice_count_h=dice_count_h, dice_count=w*dice_count_h, dice_size=dice_size_w))
 }
 
 indexBuilder <- function(img_measurements){
-  index_w <- seq(1, img_measurements$dice_count_w * img_measurements$dice_size, img_measurements$dice_size)
-  index_w <- index_w[-length(index_w)]
-  index_h <- seq(1, img_measurements$dice_count_h * img_measurements$dice_size, img_measurements$dice_size)
-  index_h <- index_h[-length(index_h)]
+  index_w <- seq(0, img_measurements$dice_count_w * img_measurements$dice_size - 1, img_measurements$dice_size)+1
+  index_h <- seq(0, img_measurements$dice_count_h * img_measurements$dice_size - 1, img_measurements$dice_size) + 1
   return(list(index_w = index_w, index_h = index_h))
 }
 
-normalize_mat <- function(mat, lower, upper){
-  mat.n <- lower + ((mat - min(mat)) * (upper - lower)) / (max(mat) - min(mat))
-  return(mat.n)
-}
-
 dicerr <- function(w, img){
-  m <- get_measurements(w, img)
+  m <- get.measurements(w, as.matrix(img))
   indices <- indexBuilder(m)
-  
-  img.n <- normalize_mat(as.matrix(img), 1, 6)
-  img.n <- img.n - mean(img.n) + 3
+
+  img.n <- as.matrix(img)*5 + 1
   
   dice.mat <- matrix(nrow = m$dice_count_w, ncol=m$dice_count_h)
   
-  m.w = 1
-  m.h = 1
+  m.w = 0
+  m.h = 0
   
   for(i in indices$index_w){
-    for (j in indices$index_h){
-      die <- img.n[i:(i+m$dice_size), j:(j+m$dice_size)]
-      dice.mat[m.w,m.h] <- round(mean(die))
-      print(paste0("j: ", j))
-      m.h <- m.h + 1
-    }
-    print(i)
+    m.h <- 0
     m.w <- m.w + 1
+
+    for (j in indices$index_h){
+      m.h <- m.h + 1
+      die <- img.n[i:(i+m$dice_size-1), j:(j+m$dice_size-1)]
+      dice.mat[m.w,m.h] <- round(mean(die))
+    }
   }
+  dice.mat <- dice.mat
+  return(t(dice.mat))
 }
 
-mat.to.image <- function(mat){
+svg.to.png <- function(svg, width){
+  png <- rsvg_png(svg = svg, width=width)
+  png <- png::readPNG(png)
+  return(png)
+}
+
+read.dice <- function(diceWidth){
+  dicePng <- lapply(paste0("die-faces/", dice.imgs), svg.to.png, width = diceWidth)
+  diceGrob <- lapply(dicePng, rasterGrob)
+  return(diceGrob)
+}
+
+replacer <- function(i, list){
+  i <- list[[i]]
+  return(i)
+}
+
+draw <- function(matrix, diceWidth){
+  dice <- read.dice(diceWidth)
+  grobMatrix <- apply(matrix, c(1,2), replacer, list=dice)
+  gt <- gtable_matrix(name="diced", 
+                      grobs = grobMatrix, 
+                      widths = unit(rep("1", ncol(grobMatrix)), "null"),
+                      heights = unit(rep("1", nrow(grobMatrix)), "null"),
+                      z = matrix, 
+                      respect=TRUE)
   
+  grid.arrange(gt)
 }
