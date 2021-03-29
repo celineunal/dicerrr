@@ -9,12 +9,12 @@ library(lattice)
 library(gridExtra)
 library(grid)
 library(ggplot2)
+library(BBmisc)
 
 dice.imgs <- c("one.svg", "two.svg", "three.svg", "four.svg", "five.svg", "six.svg")
 
-img <- load.image("bakunin.jpg") %>%
-  grayscale() %>%
-  imsub(x<=1050)
+img <- load.image("us.jpg") %>%
+  grayscale()
 
 get.measurements <- function(w, mat){
   dice_size_w <- floor(nrow(mat)/w)
@@ -32,7 +32,7 @@ dicerr <- function(w, img){
   m <- get.measurements(w, as.matrix(img))
   indices <- indexBuilder(m)
 
-  img.n <- as.matrix(img)*5 + 1
+  img.n <- normalize(as.matrix(img), method = "range", range = c(6,1))
   
   dice.mat <- matrix(nrow = m$dice_count_w, ncol=m$dice_count_h)
   
