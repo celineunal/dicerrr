@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180">
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" stroke="black">
 <circle cx="48" cy="132" r="14"/>
 <circle cx="90" cy="90" r="14"/>
 <circle cx="132" cy="48" r="14"/>
