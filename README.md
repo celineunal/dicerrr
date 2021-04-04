@@ -35,13 +35,6 @@ Following R packages were used:
 
 There is no UI or executable as of now. You can run the code in an R IDE/compiler.
 
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
-
 ## Author
 
 Celine Unal 
