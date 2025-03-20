@@ -1,20 +1,25 @@
 # Dicerr
 
 A small R program that can:
-1. Take in an image and output a matrix that describes how to recrate the image with dice.
-2. Recreate the image with a collection of die face images.
+
+1.  Take in an image and output a matrix that describes how to recrate the image with dice.
+
+2.  Recreate the image with a collection of die face images.
 
 ## Examples
 
 <p align="center">
-  <img src="example-files/cat-original.jpg" width="250" title="Cat stock photo." alt="Stock photo of a cat looking at the camera.">
-  <img src="example-files/cat-diced.bmp" width="250" title="Cat diced image." alt="The cat photo recreated with images of die faces.">
+
+<img src="example-files/person_leaning_original.jpg" title="Stock photo of a person." alt="Shows a person standing up, slightly leaning back." height="400"/> <img src="example-files/person_leaning_diced.png" title="Diced image of the person." alt="The same photo recreated with images of die faces." height="400"/>
+
 </p>
 
 Here is a video (Used ffmpeg to extract original frames, then combine diced frames):
+
 <p align="center">
-  <img src="example-files/seagulls-original.gif" width="250" title="Seagulls stock footage" alt="Stock footage of a flock of seagulls flying above.">
-  <img src="example-files/seagulls-diced.gif" width="250" title="Seagulls diced footage." alt="The seagulls video recreated with images of die faces.">
+
+<img src="example-files/seagulls-original.gif" title="Seagulls stock footage" alt="Stock footage of a flock of seagulls flying above." width="250"/> <img src="example-files/seagulls-diced.gif" title="Seagulls diced footage." alt="The seagulls video recreated with images of die faces." width="250"/>
+
 </p>
 
 ## Getting Started
@@ -23,13 +28,13 @@ Here is a video (Used ffmpeg to extract original frames, then combine diced fram
 
 Following R packages were used:
 
-* imager
-* dplyr
-* gtable
-* rsvg
-* png
-* grid
-* gridExtra
+-   imager
+-   dplyr
+-   gtable
+-   rsvg
+-   png
+-   grid
+-   gridExtra
 
 ### Executing program
 
@@ -37,8 +42,7 @@ There is no UI or executable as of now. You can run the code in an R IDE/compile
 
 ## Author
 
-Celine Unal 
-me@celineunal.com
+Celine Unal [me\@celineunal.com](mailto:me@celineunal.com){.email}
 
 ## Version History
 
